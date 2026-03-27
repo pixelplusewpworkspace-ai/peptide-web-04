@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex Bio-Research | Precision Purity Peptides</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Plus Jakarta Sans Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Alpine.js Collapse Plugin -->
+    <script defer src="https://unpkg.com/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBackground: '#050505',
+                        electricCyan: '#00E5FF',
+                        slateGrey: '#1A1A1A',
+                        carbon: '#0D0D0D',
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #050505;
+            color: #E2E8F0;
+            overflow-x: hidden;
+            font-family: "Plus Jakarta Sans", sans-serif;
+        }
+
+        /* Glassmorphism Styles */
+        .glass-nav {
+            background: rgba(5, 5, 5, 0.7);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            z-index: 100;
+        }
+
+        .glass-card {
+            background: rgba(13, 13, 13, 0.5);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(0, 229, 255, 0.2);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 40px -20px rgba(0, 229, 255, 0.25);
+        }
+
+        /* Gradient Glow Effects */
+        .glow-cyan {
+            box-shadow: 0 0 50px -10px rgba(0, 229, 255, 0.2);
+        }
+
+        .text-glow {
+            text-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #FFFFFF 0%, #B0B5CF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gradient-cyan {
+            background: linear-gradient(135deg, #00E5FF 0%, #00B4D8 100%);
+        }
+
+        /* Smooth Scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050505;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1A1A1A;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00E5FF;
+        }
+
+        /* Floating Animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(0.5deg); }
+        }
+        .animate-float {
+            animation: float 5s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body x-data="{ mobileMenu: false }">
+
+    <!-- Glowing Background Anchors -->
+    <div class="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-electricCyan/5 filter blur-[100px] pointer-events-none"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-electricCyan/5 filter blur-[100px] pointer-events-none"></div>
+
+    <!-- Sticky Glassmorphism Nav -->
+    <nav class="glass-nav fixed top-0 left-0 w-full py-4 px-6 md:px-12 flex items-center justify-between">
+        <!-- Left: Logo -->
+        <div class="flex items-center space-x-3 cursor-pointer group">
+            <div class="p-2 rounded-lg bg-[#111] border border-white/5 group-hover:border-electricCyan/30 transition-all">
+                <i data-lucide="shield-check" class="w-6 h-6 text-electricCyan"></i>
+            </div>
+            <span class="text-xl font-extrabold tracking-tight text-white">Apex<span class="text-electricCyan">Bio</span></span>
+        </div>
+
+        <!-- Center: Links (Desktop) -->
+        <div class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-400">
+            <a href="#catalog" class="hover:text-white hover:text-glow transition">Shop All</a>
+            <a href="#lab-testing" class="hover:text-white transition">Lab Testing</a>
+            <a href="#about" class="hover:text-white transition">About</a>
+            <a href="#compliance" class="hover:text-white transition">Compliance</a>
+        </div>
+
+        <!-- Right: Actions -->
+        <div class="flex items-center space-x-4">
+            <button class="hidden md:block px-5 py-2 text-sm font-semibold border border-electricCyan/50 text-electricCyan rounded-full hover:bg-electricCyan/10 hover:shadow-[0_0_15px_-3px_rgba(0,229,255,0.4)] transition-all">
+                Client Login
+            </button>
+            <button class="md:hidden p-2 text-slate-400" @click="mobileMenu = !mobileMenu">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div x-show="mobileMenu" x-transition class="absolute top-16 left-0 w-full bg-[#090909] border-b border-white/5 py-4 px-6 flex flex-col space-y-4 md:hidden">
+            <a href="#catalog" class="text-slate-300 hover:text-white">Shop All</a>
+            <a href="#lab-testing" class="text-slate-300 hover:text-white">Lab Testing</a>
+            <a href="#about" class="text-slate-300 hover:text-white">About</a>
+            <a href="#compliance" class="text-slate-300 hover:text-white">Compliance</a>
+            <button class="w-full px-5 py-2 text-center text-sm font-semibold border border-electricCyan text-electricCyan rounded-md">Client Login</button>
+        </div>
+    </nav>
+
+    <!-- Elite Hero Section -->
+    <section class="relative pt-32 pb-20 px-6 md:px-12 max-w-7xl mx-auto overflow-hidden">
+        <!-- Interactive Canvas Background -->
+        <canvas id="hero-particles" class="absolute inset-0 z-0 pointer-events-none"></canvas>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center text-center md:text-left">
+            <!-- Left Col: Content -->
+            <div class="flex flex-col items-center md:items-start">
+                <!-- Glowing Badge -->
+                <div class="flex items-center space-x-2 px-4 py-1.5 rounded-full border border-electricCyan/20 bg-electricCyan/5 backdrop-blur-md mb-6 hover:border-electricCyan/40 transition">
+                    <span class="w-2 h-2 rounded-full bg-electricCyan animate-pulse"></span>
+                    <span class="text-xs font-semibold tracking-wider text-slate-200 uppercase">US-Synthesised purity</span>
+                </div>
+
+                <!-- Main Heading -->
+                <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight gradient-text leading-[1.1] mb-6">
+                    Precision Purity.<br>
+                    <span class="text-white">Professional Research.</span>
+                </h1>
+
+                <!-- Subheading -->
+                <p class="text-base md:text-lg text-slate-400 font-medium max-w-lg mb-10 leading-relaxed">
+                    Providing 99%+ pure, US-synthesized peptides for rigorous laboratory analysis. Third-party verified for consistency and stability.
+                </p>
+
+                <!-- Double Buttons -->
+                <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 mb-12">
+                    <a href="#catalog" class="px-8 py-4 gradient-cyan text-center text-black font-extrabold rounded-xl shadow-[0_0_30px_-5px_rgba(0,229,255,0.4)] hover:shadow-[0_0_40px_-5px_rgba(0,229,255,0.6)] hover:scale-[1.02] transition-all duration-300">
+                        Browse Catalog
+                    </a>
+                    <a href="#lab-testing" class="px-8 py-4 border border-white/10 hover:border-electricCyan/30 text-center text-white font-bold rounded-xl hover:bg-white/3 backdrop-blur-lg transition-all">
+                        View Lab COAs
+                    </a>
+                </div>
+
+                <!-- Trust Row -->
+                <div class="flex items-center space-x-2 mb-12">
+                    <div class="flex text-amber-400">
+                        <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                        <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                        <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                        <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                        <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                    </div>
+                    <span class="text-slate-400 text-sm font-semibold">Verified by 8,000+ Research Facilities</span>
+                </div>
+            </div>
+
+            <!-- Right Col: Image -->
+            <div class="relative flex justify-center items-center">
+                <!-- Glowing Back Orbs -->
+                <div class="absolute w-72 h-72 rounded-full bg-electricCyan/10 filter blur-3xl pointer-events-none z-0"></div>
+                
+                <!-- Floating Container (Float removed) -->
+                <div class="relative z-10">
+                    <div class="absolute -inset-4 bg-gradient-to-r from-electricCyan/20 to-transparent opacity-30 blur-2xl rounded-full"></div>
+                    <img src="images/hero_vials-removebg-preview.png" alt="Peptide Set" class="w-full max-w-sm h-auto object-contain transform hover:scale-105 transition-all duration-500 drop-shadow-[0_20px_50px_rgba(0,229,255,0.2)]">
+                </div>
+            </div>
+        </div>
+
+        <!-- The Trust Bar (Logo Container) -->
+        <div class="w-full mt-20 border-t border-b border-white/5 py-8 flex flex-wrap justify-center items-center gap-12 text-slate-500 font-bold uppercase tracking-widest text-xs">
+            <!-- Logo 1: American Chemical Society -->
+            <div class="flex items-center space-x-2 grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition cursor-default">
+                <i data-lucide="flask-conical" class="w-5 h-5 text-electricCyan"></i>
+                <span>AMERICAN CHEMICAL SOCIETY</span>
+            </div>
+            <!-- Logo 2: Global Lab Alliance -->
+            <div class="flex items-center space-x-2 grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition cursor-default">
+                <i data-lucide="globe" class="w-5 h-5 text-electricCyan"></i>
+                <span>GLOBAL LAB ALLIANCE</span>
+            </div>
+            <!-- Logo 3: Biotech Registry -->
+            <div class="flex items-center space-x-2 grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition cursor-default">
+                <i data-lucide="dna" class="w-5 h-5 text-electricCyan"></i>
+                <span>US BIOTECH REGISTRY</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products Section -->
+    <section id="catalog" class="py-24 px-6 md:px-12 max-w-7xl mx-auto relative">
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-electricCyan/10 to-transparent"></div>
+        
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-4">Elite Reference Standards</h2>
+            <p class="text-slate-400 max-w-xl mx-auto">High-stability lyophilized products formulated for high-accuracy scientific analysis.</p>
+        </div>
+
+        <!-- 3-Column Card Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Card 1 -> BPC-157 -->
+            <div class="glass-card rounded-2xl overflow-hidden flex flex-col group">
+                <!-- Product Image Context -->
+                <div class="bg-[#0A0A0A] p-6 flex justify-center items-center relative h-64 overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-b from-transparent to-[#050505] z-10"></div>
+                    <img src="images/bpc157.png" alt="BPC-157 Vial" class="w-auto h-full max-h-48 object-contain transform group-hover:scale-105 transition-all duration-700">
+                    <!-- Glow mesh behind image -->
+                    <div class="absolute inset-0 rounded-full bg-electricCyan/10 filter blur-3xl scale-75"></div>
+                </div>
+                <div class="p-6 flex-grow flex flex-col">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-xl font-extrabold text-white">BPC-157</h3>
+                        <span class="text-sm font-semibold text-electricCyan bg-electricCyan/5 border border-electricCyan/10 px-2.5 py-1 rounded-full">5mg</span>
+                    </div>
+                    <ul class="text-slate-400 text-sm space-y-2 mb-6">
+                        <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-electricCyan mr-2"></i> High-Stability Arginate Salt</li>
+                        <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-electricCyan mr-2"></i> 99.8% Certified Purity</li>
+                        <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-electricCyan mr-2"></i> Batch Tested (HPLC Verified)</li>
+                    </ul>
+                    <div class="mt-auto flex items-center justify-between pt-4 border-t border-white/5">
+                        <span class="text-white font-bold text-lg">$64.00</span>
+                        <button class="p-2 py-1.5 px-4 text-xs font-bold border border-white/10 hover:border-electricCyan/40 text-white rounded-lg hover:bg-electricCyan/5 transition-all">
+                            View Spec
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 -> TB-500 -->
+            <div class="glass-card rounded-2xl overflow-hidden flex flex-col group">
+                <div class="bg-[#0A0A0A] p-6 flex justify-center items-center relative h-64 overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-b from-transparent to-[#050505] z-10"></div>
+                    <img src="images/tb500.png" alt="TB-500 Vial" class="w-auto h-full max-h-48 object-contain transform group-hover:scale-105 transition-all duration-700">
+                    <div class="absolute inset-0 rounded-full bg-electricCyan/5 filter blur-3xl scale-75"></div>
+                </div>
+                <div class="p-6 flex-grow flex flex-col">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-xl font-extrabold text-white">TB-500</h3>
+                        <span class="text-sm font-semibold text-electricCyan bg-electricCyan/5 border border-electricCyan/10 px-2.5 py-1 rounded-full">2mg</span>
+                    </div>
+                    <ul class="text-slate-400 text-sm space-y-2 mb-6">
+                        <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-electricCyan mr-2"></i> Lyophilized Powder</li>
+                        <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-electricCyan mr-2"></i> Sequence & HPLC Verified</li>
+                        <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-electricCyan mr-2"></i> Batch Tested (HPLC Verified)</li>
+                    </ul>
+                    <div class="mt-auto flex items-center justify-between pt-4 border-t border-white/5">
+                        <span class="text-white font-bold text-lg">$58.00</span>
+                        <button class="p-2 py-1.5 px-4 text-xs font-bold border border-white/10 hover:border-electricCyan/40 text-white rounded-lg hover:bg-electricCyan/5 transition-all">
+                            View Spec
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 -> Tirzepatide -->
+            <div class="glass-card rounded-2xl overflow-hidden flex flex-col group">
+                <div class="bg-[#0A0A0A] p-6 flex justify-center items-center relative h-64 overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-b from-transparent to-[#050505] z-10"></div>
+                    <img src="images/tirzepatide.png" alt="Tirzepatide Vial" class="w-auto h-full max-h-48 object-contain transform group-hover:scale-105 transition-all duration-700">
+                    <div class="absolute inset-0 rounded-full bg-electricCyan/10 filter blur-3xl scale-75"></div>
+                </div>
+                <div class="p-6 flex-grow flex flex-col">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-xl font-extrabold text-white">Tirzepatide</h3>
+                        <span class="text-sm font-semibold text-electricCyan bg-electricCyan/5 border border-electricCyan/10 px-2.5 py-1 rounded-full">10mg</span>
+                    </div>
+                    <ul class="text-slate-400 text-sm space-y-2 mb-6">
+                        <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-electricCyan mr-2"></i> Premium Peptide Formulation</li>
+                        <li class="flex items-center"><i data-lucide="check" class="w-4 h-4 text-electricCyan mr-2"></i> Batch Tested (HPLC Verified)</li>
+                    </ul>
+                    <div class="mt-auto flex items-center justify-between pt-4 border-t border-white/5">
+                        <span class="text-white font-bold text-lg">$140.00</span>
+                        <button class="p-2 py-1.5 px-4 text-xs font-bold border border-white/10 hover:border-electricCyan/40 text-white rounded-lg hover:bg-electricCyan/5 transition-all">
+                            View Spec
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quality Assurance Section -->
+    <section id="lab-testing" class="py-24 px-6 md:px-12 bg-[#080808] border-t border-b border-white/5 relative">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+            <!-- Left Header setup -->
+            <div>
+                <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-6">Uncontrolled Variable Elimination.</h2>
+                <p class="text-slate-400 mb-8 leading-relaxed">
+                    We eliminate anomalies through rigorous synthesis frameworks. Every batch undergoes High-Performance Liquid Chromatography (HPLC) and Mass Spectrometry to guarantee extreme data consistency for researchers.
+                </p>
+                <!-- Double verification tags -->
+                <div class="flex space-x-4 mb-4">
+                    <div class="flex items-center space-x-2 bg-[#111] border border-white/5 p-3 rounded-lg flex-1">
+                        <i data-lucide="binary" class="w-5 h-5 text-electricCyan"></i>
+                        <span class="text-sm font-semibold text-slate-200">HPLC Certificate Included</span>
+                    </div>
+                    <div class="flex items-center space-x-2 bg-[#111] border border-white/5 p-3 rounded-lg flex-1">
+                        <i data-lucide="snowflake" class="w-5 h-5 text-electricCyan"></i>
+                        <span class="text-sm font-semibold text-slate-200">Cold-Chain logistics</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: QA Grid for features with large cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <!-- QA 1 -> USA Made -->
+                <div class="glass-card p-6 rounded-2xl h-full flex flex-col hover:border-electricCyan/20">
+                    <div class="p-3 bg-electricCyan/5 rounded-xl w-12 h-12 flex items-center justify-center mb-4 border border-electricCyan/10">
+                        <i data-lucide="git-branch" class="w-6 h-6 text-electricCyan"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">US-Based Synthesis</h3>
+                    <p class="text-slate-400 text-sm">Synthetic peptide chains synthesized natively in compliant US lab setups.</p>
+                </div>
+
+                <!-- QA 2 -> HPLC Verified -->
+                <div class="glass-card p-6 rounded-2xl h-full flex flex-col hover:border-electricCyan/20">
+                    <div class="p-3 bg-electricCyan/5 rounded-xl w-12 h-12 flex items-center justify-center mb-4 border border-electricCyan/10">
+                        <i data-lucide="file-check" class="w-6 h-6 text-electricCyan"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">HPLC Verified</h3>
+                    <p class="text-slate-400 text-sm">Third-party chemical assay testing with downloadable COA documents.</p>
+                </div>
+
+                <!-- QA 3 -> Secured Shipping -->
+                <div class="glass-card p-6 rounded-2xl h-full flex flex-col hover:border-electricCyan/20 col-span-1 sm:col-span-2">
+                    <div class="p-3 bg-electricCyan/5 rounded-xl w-12 h-12 flex items-center justify-center mb-4 border border-electricCyan/10">
+                        <i data-lucide="truck" class="w-6 h-6 text-electricCyan"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Cold-Chain Shipping</h3>
+                    <p class="text-slate-400 text-sm">Temperature-controlled packaging keeps lyophilization powder from degrading in transit.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lab Results / COAs Section -->
+    <section id="coas" class="py-24 px-6 md:px-12 max-w-7xl mx-auto border-t border-white/3 relative">
+        <div class="absolute top-0 right-0 w-[30%] h-[30%] bg-electricCyan/5 filter blur-3xl pointer-events-none"></div>
+        
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-4">Independent Lab Results</h2>
+            <p class="text-slate-400 max-w-xl mx-auto">Download verified Certificate of Analysis (COA) reports for current processing batches to eliminate unverified compliance matrices.</p>
+        </div>
+
+        <!-- Table Display -->
+        <div class="glass-card rounded-2xl overflow-hidden border border-white/5">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-[#0A0A0A] border-b border-white/5">
+                            <th class="p-5 text-slate-300 text-xs font-bold uppercase tracking-wider">Batch ID</th>
+                            <th class="p-5 text-slate-300 text-xs font-bold uppercase tracking-wider">Compound</th>
+                            <th class="p-5 text-slate-300 text-xs font-bold uppercase tracking-wider">HPLC Purity</th>
+                            <th class="p-5 text-slate-300 text-xs font-bold uppercase tracking-wider">Test Date</th>
+                            <th class="p-5 text-slate-300 text-xs font-bold uppercase tracking-wider text-right">Download</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/3 text-sm text-slate-400">
+                        <!-- Row 1 -->
+                        <tr class="hover:bg-white/1 transition-all">
+                            <td class="p-5 font-mono text-electricCyan">#AB-9812</td>
+                            <td class="p-5 font-bold text-white">BPC-157 (5mg)</td>
+                            <td class="p-5">99.82%</td>
+                            <td class="p-5">March 12, 2026</td>
+                            <td class="p-5 text-right">
+                                <a href="#" class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-electricCyan/5 border border-electricCyan/10 hover:border-electricCyan/30 text-electricCyan text-xs font-bold transition-all">
+                                    <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+                                    <span>Download COA</span>
+                                </a>
+                            </td>
+                        </tr>
+                        <!-- Row 2 -->
+                        <tr class="hover:bg-white/1 transition-all">
+                            <td class="p-5 font-mono text-electricCyan">#AB-9813</td>
+                            <td class="p-5 font-bold text-white">TB-500 (2mg)</td>
+                            <td class="p-5">99.55%</td>
+                            <td class="p-5">March 14, 2026</td>
+                            <td class="p-5 text-right">
+                                <a href="#" class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-electricCyan/5 border border-electricCyan/10 hover:border-electricCyan/30 text-electricCyan text-xs font-bold transition-all">
+                                    <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+                                    <span>Download COA</span>
+                                </a>
+                            </td>
+                        </tr>
+                        <!-- Row 3 -->
+                        <tr class="hover:bg-white/1 transition-all">
+                            <td class="p-5 font-mono text-electricCyan">#AB-9814</td>
+                            <td class="p-5 font-bold text-white">Tirzepatide (10mg)</td>
+                            <td class="p-5">99.90%</td>
+                            <td class="p-5">March 15, 2026</td>
+                            <td class="p-5 text-right">
+                                <a href="#" class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-electricCyan/5 border border-electricCyan/10 hover:border-electricCyan/30 text-electricCyan text-xs font-bold transition-all">
+                                    <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+                                    <span>Download COA</span>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Legal & FDA Compliance Box (CRITICAL) -->
+    <section id="compliance" class="py-16 px-6 md:px-12 max-w-4xl mx-auto">
+        <div class="border border-red-500/30 bg-red-500/5 rounded-2xl p-6 md:p-8 flex items-start space-x-4 md:space-x-6">
+            <div class="p-3 bg-red-500/10 rounded-xl text-red-400 border border-red-500/20">
+                <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <h3 class="text-xl font-extrabold text-red-400 mb-2 uppercase tracking-wide">ATTENTION: FDA COMPLIANCE</h3>
+                <p class="text-slate-300 text-sm leading-relaxed font-medium">
+                    All compounds listed on this site are for <span class="text-white font-bold">LABORATORY RESEARCH USE ONLY.</span> Products are not for human consumption, medical, or therapeutic use. We strictly adhere to all FDA compliance mandates for research chemicals. None of these statements have been evaluated by the FDA.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof (Reviews) Section -->
+    <section class="py-24 px-6 md:px-12 max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-4">Laboratory Benchmarks.</h2>
+            <p class="text-slate-400">Trusted by modern biotechnology researchers for data replicability.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Review 1 -->
+            <div class="glass-card p-6 rounded-xl flex flex-col justify-between">
+                <div>
+                    <div class="flex text-amber-500 mb-4">
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                    </div>
+                    <p class="text-slate-300 text-sm italic mb-6">
+                        "The purity levels are consistent across batch testing. We replicated our HPLC assays and found an aggregate purity of 99.82%, well above standard references."
+                    </p>
+                </div>
+                <div class="flex items-center justify-between border-t border-white/5 pt-4">
+                    <div>
+                        <span class="block text-white font-bold text-sm">Dr. Elias H.</span>
+                        <span class="block text-slate-500 text-xs">Bio-Tech Labs</span>
+                    </div>
+                    <span class="text-electricCyan/80 text-xs bg-electricCyan/5 border border-electricCyan/10 px-2.5 py-1 rounded-full flex items-center space-x-1">
+                        <i data-lucide="shield" class="w-3 h-3"></i>
+                        <span>Verified</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Review 2 -->
+            <div class="glass-card p-6 rounded-xl flex flex-col justify-between">
+                <div>
+                    <div class="flex text-amber-500 mb-4">
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                    </div>
+                    <p class="text-slate-300 text-sm italic mb-6">
+                        "Reliable shipping speeds which are critical for cold-chain maintenance. Vials arrived perfectly intact inside thermal insulated coolers."
+                    </p>
+                </div>
+                <div class="flex items-center justify-between border-t border-white/5 pt-4">
+                    <div>
+                        <span class="block text-white font-bold text-sm">S. Montgomery</span>
+                        <span class="block text-slate-500 text-xs">University Research</span>
+                    </div>
+                    <span class="text-electricCyan/80 text-xs bg-electricCyan/5 border border-electricCyan/10 px-2.5 py-1 rounded-full flex items-center space-x-1">
+                        <i data-lucide="shield" class="w-3 h-3"></i>
+                        <span>Verified</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Review 3 -->
+            <div class="glass-card p-6 rounded-xl flex flex-col justify-between">
+                <div>
+                    <div class="flex text-amber-500 mb-4">
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                    </div>
+                    <p class="text-slate-300 text-sm italic mb-6">
+                        "Apex provides high stability BPC salts. Lyophilized structure is flawless and fully dissolvable with no visible residue. Elite standard."
+                    </p>
+                </div>
+                <div class="flex items-center justify-between border-t border-white/5 pt-4">
+                    <div>
+                        <span class="block text-white font-bold text-sm">Prof. Arnold V.</span>
+                        <span class="block text-slate-500 text-xs">Molecular Studies</span>
+                    </div>
+                    <span class="text-electricCyan/80 text-xs bg-electricCyan/5 border border-electricCyan/10 px-2.5 py-1 rounded-full flex items-center space-x-1">
+                        <i data-lucide="shield" class="w-3 h-3"></i>
+                        <span>Verified</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-24 px-6 md:px-12 bg-[#080808] border-t border-b border-white/5 relative" x-data="{ activeFaq: null }">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-4">Frequently Asked Questions</h2>
+                <p class="text-slate-400">Quick answers regarding payment gateways, logistics, and data privacy.</p>
+            </div>
+
+            <!-- Accordion List -->
+            <div class="space-y-4">
+                <!-- FAQ 1 -> Payment Gateways -->
+                <div class="glass-card rounded-xl overflow-hidden border border-white/5 hover:border-electricCyan/10 transition-all">
+                    <button class="w-full p-5 flex justify-between items-center text-left" @click="activeFaq === 1 ? activeFaq = null : activeFaq = 1">
+                        <span class="text-sm font-bold text-white">What payment methods do you accept?</span>
+                        <i data-lucide="plus" class="w-4 h-4 text-electricCyan transition-transform duration-300" :class="activeFaq === 1 ? 'rotate-45' : ''"></i>
+                    </button>
+                    <div x-show="activeFaq === 1" x-collapse>
+                        <div class="px-5 pb-5 text-slate-400 text-sm leading-relaxed border-t border-white/5 pt-4">
+                            We accept secure Mastercard/Visa processing via **Authorise.net**, along with decentralized **Cryptocurrency (Bitcoin)** node channels to strictly respect absolute researcher node privacy and encrypted transactional boundaries.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ 2 -> Shipping Duration -->
+                <div class="glass-card rounded-xl overflow-hidden border border-white/5 hover:border-electricCyan/10 transition-all">
+                    <button class="w-full p-5 flex justify-between items-center text-left" @click="activeFaq === 2 ? activeFaq = null : activeFaq = 2">
+                        <span class="text-sm font-bold text-white">How long does shipping take and is it temperature controlled?</span>
+                        <i data-lucide="plus" class="w-4 h-4 text-electricCyan transition-transform duration-300" :class="activeFaq === 2 ? 'rotate-45' : ''"></i>
+                    </button>
+                    <div x-show="activeFaq === 2" x-collapse>
+                        <div class="px-5 pb-5 text-slate-400 text-sm leading-relaxed border-t border-white/5 pt-4">
+                            Standard domestic packages reach facilities within **2-4 business days**. Vials ship inside thermal cold-chain insulation coolers populated with freeze packs ensuring lyophilized powder cakes remain accurate during peak node fluxes.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ 3 -> Discrete Packaging/Privacy -->
+                <div class="glass-card rounded-xl overflow-hidden border border-white/5 hover:border-electricCyan/10 transition-all">
+                    <button class="w-full p-5 flex justify-between items-center text-left" @click="activeFaq === 3 ? activeFaq = null : activeFaq = 3">
+                        <span class="text-sm font-bold text-white">Do you package products discreetly?</span>
+                        <i data-lucide="plus" class="w-4 h-4 text-electricCyan transition-transform duration-300" :class="activeFaq === 3 ? 'rotate-45' : ''"></i>
+                    </button>
+                    <div x-show="activeFaq === 3" x-collapse>
+                        <div class="px-5 pb-5 text-slate-400 text-sm leading-relaxed border-t border-white/5 pt-4">
+                            Yes. All research compounds are dispatched in flat brown corrugated corrugated packages with **zero external branding** or references connecting directly regarding compound parameters to strictly mask transport transparency correctly.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ 4 -> HPLC Compliance -->
+                <div class="glass-card rounded-xl overflow-hidden border border-white/5 hover:border-electricCyan/10 transition-all">
+                    <button class="w-full p-5 flex justify-between items-center text-left" @click="activeFaq === 4 ? activeFaq = null : activeFaq = 4">
+                        <span class="text-sm font-bold text-white">Do these compounds include lab validation certificates?</span>
+                        <i data-lucide="plus" class="w-4 h-4 text-electricCyan transition-transform duration-300" :class="activeFaq === 4 ? 'rotate-45' : ''"></i>
+                    </button>
+                    <div x-show="activeFaq === 4" x-collapse>
+                        <div class="px-5 pb-5 text-slate-400 text-sm leading-relaxed border-t border-white/5 pt-4">
+                            Absolutely. Every batch is cataloged on the repository linking to live Third-Party standalone **HPLC (High-Stability verification analysis) streams** viewable on visual dashboard certification logs mapping accuracy logs explicitly.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ 5 -> Returns/Guarantee -->
+                <div class="glass-card rounded-xl overflow-hidden border border-white/5 hover:border-electricCyan/10 transition-all">
+                    <button class="w-full p-5 flex justify-between items-center text-left" @click="activeFaq === 5 ? activeFaq = null : activeFaq = 5">
+                        <span class="text-sm font-bold text-white">What is your refund policy if packages arrive compromised?</span>
+                        <i data-lucide="plus" class="w-4 h-4 text-electricCyan transition-transform duration-300" :class="activeFaq === 5 ? 'rotate-45' : ''"></i>
+                    </button>
+                    <div x-show="activeFaq === 5" x-collapse>
+                        <div class="px-5 pb-5 text-slate-400 text-sm leading-relaxed border-t border-white/5 pt-4">
+                            Security compromises triggered during transit verify absolute reship guarantees natively once compromising continuous diagnostic confirmation logs reach node support queues forming straightforward recovery tickets accurately.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Deep Footer -->
+    <footer class="bg-[#030303] border-t border-white/3 pt-16 pb-8 px-6 md:px-12">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+            <!-- Col 1: Brand -->
+            <div>
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="p-2 rounded-lg bg-electricCyan/5 border border-electricCyan/10">
+                        <i data-lucide="shield-check" class="w-5 h-5 text-electricCyan"></i>
+                    </div>
+                    <span class="text-lg font-extrabold text-white">Apex<span class="text-electricCyan">Bio</span></span>
+                </div>
+                <p class="text-slate-500 text-xs leading-relaxed">
+                    Premium and vetted synthesis chain supplying high-purity peptides to independent research entities globally. 
+                </p>
+            </div>
+
+            <!-- Col 2: Navigation -->
+            <div>
+                <h4 class="text-white font-bold text-sm mb-4 uppercase tracking-wider">Product Catalog</h4>
+                <ul class="space-y-2 text-slate-400 text-sm">
+                    <li><a href="#" class="hover:text-electricCyan transition">All Products</a></li>
+                    <li><a href="#" class="hover:text-electricCyan transition">HPLC Certificates</a></li>
+                    <li><a href="#" class="hover:text-electricCyan transition">FAQ</a></li>
+                </ul>
+            </div>
+
+            <!-- Col 3: Legal -->
+            <div>
+                <h4 class="text-white font-bold text-sm mb-4 uppercase tracking-wider">Legal</h4>
+                <ul class="space-y-2 text-slate-400 text-sm">
+                    <li><a href="#" class="hover:text-electricCyan transition">Terms of Service</a></li>
+                    <li><a href="#" class="hover:text-electricCyan transition">Privacy Policy</a></li>
+                    <li><a href="#" class="hover:text-electricCyan transition">Shipping & Returns</a></li>
+                </ul>
+            </div>
+
+            <!-- Col 4: Contact -->
+            <div>
+                <h4 class="text-white font-bold text-sm mb-4 uppercase tracking-wider">Contact Us</h4>
+                <ul class="space-y-2 text-slate-400 text-sm">
+                    <li class="flex items-center space-x-2"><i data-lucide="mail" class="w-4 h-4 text-electricCyan"></i> <span>support@apexbio.res</span></li>
+                    <li class="flex items-center space-x-2"><i data-lucide="phone" class="w-4 h-4 text-electricCyan"></i> <span>+1 (888) 420-APEX</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Payment Badges / Copyright -->
+        <div class="max-w-7xl mx-auto border-t border-white/3 pt-8 flex flex-col md:flex-row items-center justify-between">
+            <span class="text-slate-600 text-xs mb-4 md:mb-0">&copy; 2026 Apex Bio-Research. All rights reserved. For research only.</span>
+            
+            <!-- Payment Badges -->
+            <div class="flex items-center space-x-4 grayscale opacity-60">
+                <div class="p-1 px-2 border border-white/10 rounded-md bg-[#111] text-[10px] font-bold text-white tracking-widest">VISA</div>
+                <div class="p-1 px-2 border border-white/10 rounded-md bg-[#111] text-[10px] font-bold text-white tracking-widest">MC</div>
+                <div class="p-1 px-2 border border-white/10 rounded-md bg-[#111] text-[10px] font-bold text-white tracking-widest flex items-center space-x-1">
+                    <i data-lucide="coins" class="w-3 h-3 text-amber-400"></i>
+                    <span>BTC</span>
+                </div>
+                <div class="p-1 px-2 border border-white/10 rounded-md bg-[#111] text-[10px] font-bold text-slate-400 tracking-wider">Authorize.Net</div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive Particles/Mesh JS -->
+    <script>
+        const canvas = document.getElementById('hero-particles');
+        const ctx = canvas.getContext('2d');
+
+        let particles = [];
+        const particleCount = 100;
+        let mouse = { x: null, y: null, radius: 150 };
+
+        function resizeCanvas() {
+            const section = canvas.parentElement;
+            canvas.width = section.offsetWidth;
+            canvas.height = section.offsetHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        window.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            mouse.x = e.clientX - rect.left;
+            mouse.y = e.clientY - rect.top;
+        });
+
+        // Hide mouse connection when leaving section
+        canvas.parentElement.addEventListener('mouseleave', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                // random direction speeds
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.size = Math.random() * 2 + 0.8;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.y < 0) this.y = canvas.height;
+                if (this.y > canvas.height) this.y = 0;
+            }
+            draw() {
+                ctx.fillStyle = 'rgba(0, 229, 255, 0.4)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function init() {
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                
+                // Track interaction with cursor
+                if (mouse.x !== null) {
+                    let dx = particles[i].x - mouse.x;
+                    let dy = particles[i].y - mouse.y;
+                    let dist = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (dist < mouse.radius) {
+                        ctx.strokeStyle = `rgba(0, 229, 255, ${0.4 * (1 - dist / mouse.radius)})`;
+                        ctx.lineWidth = 0.8;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        // Make drawing wavy or straight for node reveal
+                        ctx.lineTo(mouse.x, mouse.y);
+                        ctx.stroke();
+                    }
+                }
+                
+                // Track mesh connectivity
+                for(let j=i+1; j < particles.length; j++) {
+                    let dx2 = particles[i].x - particles[j].x;
+                    let dy2 = particles[i].y - particles[j].y;
+                    let dist2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+                    if (dist2 < 90) {
+                         ctx.strokeStyle = `rgba(0, 229, 255, ${0.15 * (1 - dist2 / 90)})`;
+                         ctx.lineWidth = 0.4;
+                         ctx.beginPath();
+                         ctx.moveTo(particles[i].x, particles[i].y);
+                         ctx.lineTo(particles[j].x, particles[j].y);
+                         ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        init();
+        animate();
+    </script>
+
+    <!-- Initialize Lucide Icons -->
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
